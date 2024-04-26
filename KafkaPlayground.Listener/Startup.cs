@@ -7,16 +7,12 @@ namespace KafkaPlayground.Listener
 {
     public class Startup
     {
-        internal static void ConfigureServices
-        (
-            IServiceCollection serviceCollection,
-            IConfiguration config
-        )
+        internal static void ConfigureServices(IServiceCollection serviceCollection, IConfiguration config)
         {
-            serviceCollection.Configure<UserEventsConfiguration>(config.GetSection(nameof(UserEventsConfiguration)));
-            serviceCollection.Configure<VehicleEventsConfiguration>(config.GetSection(nameof(VehicleEventsConfiguration)));
-            serviceCollection.AddScoped<IConsumer, UserEventsConsumer>();
-            serviceCollection.AddScoped<IConsumer, VehicleEventsConsumer>();
+            serviceCollection.AddSingleton(config.GetSection(nameof(UserEventsConfiguration)).Get<UserEventsConfiguration>());
+            serviceCollection.AddSingleton<IConsumer, UserEventsConsumer>();
+            serviceCollection.AddSingleton(config.GetSection(nameof(VehicleEventsConfiguration)).Get<VehicleEventsConfiguration>());
+            serviceCollection.AddSingleton<IConsumer, VehicleEventsConsumer>();
         }
     }
 }
